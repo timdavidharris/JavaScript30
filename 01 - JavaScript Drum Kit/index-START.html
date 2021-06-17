@@ -59,10 +59,30 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-  window.addEventListener('keydown', function (e){
-    const audio = document.querySelector(`audio[data-key="${e.keyCode}]"`);
-    console.log(audio);
-  });
+
+function playSound(e){
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    // this if statement will stop the function from running all together
+    if(!audio) return;
+    // this code below lets us get a sound before it has finished playing
+    audio.currentTime = 0;
+    audio.play();
+    key.classList.add('playing');
+  };
+
+  function removeTransition(e) {
+    // if statement will skip it if it's not a transform
+    if(e.propertyName !== 'transform') return;
+    // this removes the CSS so the transition fades back, it references the CSS for timing so we only update the timing in the CSS
+    this.classList.remove('playing');
+  }
+
+const keys = document.querySelectorAll('.key');
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+window.addEventListener('keydown',playSound);
+
 </script>
 
 
